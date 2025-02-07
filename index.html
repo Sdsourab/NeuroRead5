@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroRead Pro - Advanced Bionic Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-all duration-300 min-h-screen">
+    <div class="container mx-auto px-4 py-8 flex flex-col min-h-screen">
+        <!-- Header -->
+        <header class="mb-8 border-b dark:border-gray-700 pb-4 animate-fade-in">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-white bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        NeuroRead Pro
+                    </h1>
+                    <p class="text-gray-600 dark:text-gray-400 mt-1">Cognitive Enhancement Text Processor</p>
+                </div>
+                <nav class="flex items-center gap-4">
+                    <button id="themeToggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <i class="fas fa-sun text-gray-800 dark:text-white"></i>
+                    </button>
+                    <button id="aiModeToggle" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity">
+                        <i class="fas fa-brain mr-2"></i>AI Mode
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Input Section -->
+            <div class="space-y-6">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">
+                            <i class="fas fa-feather-alt mr-2"></i>Input Text
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="handleClear()" class="px-3 py-1.5 bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-700 transition-colors">
+                                <i class="fas fa-broom mr-1"></i>Clear
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="inputText" rows="10" 
+                        class="w-full p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 text-gray-800 resize-none focus:ring-2 focus:ring-blue-500 transition-all placeholder-gray-400 dark:placeholder-gray-500"
+                        placeholder="Paste or type your text here..."></textarea>
+                    <div class="mt-4 flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                        <div class="flex gap-4">
+                            <button onclick="handleImport()" class="hover:text-blue-600 dark:hover:text-blue-400">
+                                <i class="fas fa-file-import mr-1"></i>Import
+                            </button>
+                            <button onclick="handleSpeechInput()" class="hover:text-green-600 dark:hover:text-green-400">
+                                <i class="fas fa-microphone mr-1"></i>Dictate
+                            </button>
+                        </div>
+                        <div>
+                            <span id="wordCount">0</span> words
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Panel -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+                    <div class="space-y-6">
+                        <!-- Text Formatting Controls -->
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-palette mr-2"></i>Text Color
+                                    </label>
+                                    <input type="color" id="textColor" value="#000000" 
+                                        class="w-full h-10 rounded-lg cursor-pointer">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-brush mr-2"></i>Background
+                                    </label>
+                                    <input type="color" id="bgColor" value="#ffffff" 
+                                        class="w-full h-10 rounded-lg cursor-pointer">
+                                </div>
+                            </div>
+                            <!-- Bold Adjustment -->
+                            <div>
+                                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-bold mr-2"></i>Bold Intensity
+                                </label>
+                                <input type="range" id="boldIntensity" min="0.1" max="0.9" step="0.1" value="0.4" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    Current: <span id="boldIntensityValue">40%</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="optimizeReadability()" 
+                                class="px-4 py-2 bg-green-100 dark:bg-green-800 text-green-600 dark:text-green-200 rounded-lg hover:bg-green-200 dark:hover:bg-green-700 transition-colors">
+                                <i class="fas fa-magic mr-2"></i>Auto-Optimize
+                            </button>
+                            <button onclick="summarizeText()" 
+                                class="px-4 py-2 bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-compress mr-2"></i>Summarize
+                            </button>
+                        </div>
+
+                        <!-- Conversion Trigger -->
+                        <button onclick="handleConversion()" 
+                            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold">
+                            <i class="fas fa-brain mr-2"></i>Neuro-Convert
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">
+                        <i class="fas fa-eye mr-2"></i>Enhanced Reading View
+                    </h2>
+                    <div class="flex gap-2">
+                        <button onclick="handleCopy()" 
+                            class="px-3 py-1.5 bg-green-100 dark:bg-green-800 text-green-600 dark:text-green-200 rounded-lg hover:bg-green-200 dark:hover:bg-green-700 transition-colors">
+                            <i class="fas fa-copy mr-1"></i>Copy
+                        </button>
+                        <button onclick="handleExport()" 
+                            class="px-3 py-1.5 bg-purple-100 dark:bg-purple-800 text-purple-600 dark:text-purple-200 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-file-export mr-1"></i>Export
+                        </button>
+                        <button onclick="redirectToReadingMode()" 
+                            class="px-3 py-1.5 bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-200 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-expand mr-1"></i>Reading Mode
+                        </button>
+                    </div>
+                </div>
+                <div id="output" 
+                    class="p-4 border rounded-lg bg-white dark:bg-gray-900 dark:border-gray-700 min-h-[300px] max-w-none overflow-auto transition-all duration-300 whitespace-pre-wrap"
+                    style="color: #000000; background-color: #ffffff;">
+                </div>
+                <div class="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between">
+                    <div>
+                        <i class="fas fa-clock mr-1"></i>
+                        <span id="readingTime">0</span> min read
+                    </div>
+                    <div>
+                        <i class="fas fa-chart-bar mr-1"></i>
+                        <span id="complexity">Grade 5</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-8 border-t dark:border-gray-700 pt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+            <p>© 2025 NeuroRead Pro. Cognitive Text Processing System v5.2</p>
+            <p class="mt-1">Powered by Sourav Dey Soptom</p>
+        </footer>
+    </div>
+
+    <script>
+        // Configuration
+        let CONVERSION_RATIO = 0.4; // Default bold intensity
+        let currentTextColor = '#000000';
+        let currentBgColor = '#ffffff';
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // Initialize Theme
+        document.documentElement.classList.toggle('dark', isDarkMode);
+        document.getElementById('themeToggle').querySelector('i').className = isDarkMode ? 'fas fa-moon' : 'fas fa-sun';
+
+        // Initialize Bold Intensity
+        const boldIntensitySlider = document.getElementById('boldIntensity');
+        const boldIntensityValue = document.getElementById('boldIntensityValue');
+        boldIntensitySlider.addEventListener('input', () => {
+            CONVERSION_RATIO = parseFloat(boldIntensitySlider.value);
+            boldIntensityValue.textContent = `${Math.round(CONVERSION_RATIO * 100)}%`;
+            handleConversion(); // Reapply conversion with new bold intensity
+        });
+
+        // Enhanced Conversion with Text Formatting
+        function handleConversion() {
+            const input = document.getElementById('inputText').value;
+            const output = document.getElementById('output');
+            
+            // Preserve original formatting including line breaks and multiple spaces
+            const converted = input.split('\n').map(paragraph => {
+                return paragraph.split(/(\s+)/).map(word => {
+                    if (word.trim().length === 0) return word; // Preserve whitespace
+                    const boldLength = Math.max(1, Math.floor(word.length * CONVERSION_RATIO));
+                    return `<span class="font-bold" style="color: ${currentTextColor}">${word.substring(0, boldLength)}</span>${word.substring(boldLength)}`;
+                }).join('');
+            }).join('<br>');
+
+            output.innerHTML = converted;
+            applyStyling();
+            updateMetrics();
+
+            // Save bionic text to localStorage for reading mode
+            localStorage.setItem('readingModeContent', output.innerHTML);
+        }
+
+        // Redirect to Reading Mode
+        function redirectToReadingMode() {
+            const output = document.getElementById('output').innerHTML;
+            if (output.trim() === '') {
+                alert('Please convert some text first!');
+                return;
+            }
+            localStorage.setItem('readingModeContent', output);
+            window.location.href = 'reading-mode.html';
+        }
+
+        // Apply Text and Background Color
+        function applyStyling() {
+            const output = document.getElementById('output');
+            output.style.color = currentTextColor;
+            output.style.backgroundColor = currentBgColor;
+        }
+
+        // Clear Functionality
+        function handleClear() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('output').innerHTML = '';
+            updateMetrics();
+            showToast('Cleared input and output!', 'blue');
+        }
+
+        // Toast Notification System
+        function showToast(message, color = 'blue') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-4 right-4 px-4 py-2 rounded-lg text-white bg-${color}-600 animate-fade-in`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Initialize Metrics
+        document.getElementById('inputText').addEventListener('input', updateMetrics);
+        updateMetrics();
+    </script>
+</body>
+</html>

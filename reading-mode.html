@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroRead Pro - Reading Mode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Full-screen reading mode styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+            font-family: sans-serif;
+        }
+
+        #readingContent {
+            max-width: 100%;
+            padding: 20px;
+            line-height: 1.8;
+            font-size: 1.5rem;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button -->
+    <div class="back-button">
+        <button onclick="window.location.href='index.html'" 
+            class="px-1 py-0.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Home
+        </button>
+    </div>
+
+    <!-- Reading Content -->
+    <div id="readingContent">
+        <!-- Content will be dynamically inserted here -->
+    </div>
+
+    <script>
+        // Load content from localStorage
+        const readingContent = document.getElementById('readingContent');
+        const savedContent = localStorage.getItem('readingModeContent');
+
+        if (savedContent) {
+            readingContent.innerHTML = savedContent;
+        } else {
+            readingContent.innerHTML = '<p class="text-gray-500">No content available. Please go back and convert some text.</p>';
+        }
+
+        // Apply full-screen styles dynamically
+        document.body.style.height = '100vh';
+        document.body.style.overflowY = 'auto';
+        document.body.style.display = 'flex';
+        document.body.style.flexDirection = 'column';
+        document.body.style.justifyContent = 'center';
+        document.body.style.alignItems = 'center';
+    </script>
+</body>
+</html>
